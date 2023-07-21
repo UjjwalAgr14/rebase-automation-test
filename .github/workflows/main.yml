@@ -1,0 +1,26 @@
+name: Auto-rebase dev on main changes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  rebase:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create dev branch
+        run: git branch dev
+
+      - name: Switch to dev branch
+        run: git checkout dev
+
+      - name: Pull changes from main
+        run: git pull origin main
+
+      - name: Push changes to dev
+        run: git push origin dev
