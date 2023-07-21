@@ -17,7 +17,8 @@ jobs:
         run: |
           git config --global user.name "UjjwalAgr14"
           git config --global user.email "ujjwal@recruitcrm.io"
-          git checkout dev
+          git checkout -b dev
+
 
       - name: Pull changes from main
         run: git pull origin main
