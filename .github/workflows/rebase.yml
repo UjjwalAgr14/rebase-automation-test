@@ -1,4 +1,4 @@
-name: Automated Rebase
+name: Auto-rebase dev on main changes
 
 on:
   push:
@@ -10,17 +10,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the code
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Git
         run: |
-         git config --global user.name "UjjwalAgr14"
-         git config --global user.email "ujjwal@recruitcrm.io"
-         git remote set-url origin https://github.com/UjjwalAgr14/rebase-automation-test.git
-         git fetch origin dev
-         git checkout dev
-         git rebase origin/main
-         git push origin HEAD:dev --force-with-lease
-        env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          git config --global user.name "UjjwalAgr14"
+          git config --global user.email "ujjwal@recruitcrm.io"
+          git checkout dev
+
+      - name: Pull changes from main
+        run: git pull origin main
+
+      - name: Enable rerere
+        run: git config --global rerere.enabled true
+
+      - name: Automatic rebase with conflict resolution
+        run: |
+          while git rebase --continue; do :; done
+          if [ $? -eq 0 ]; then
+            git push origin dev
+          else
+            echo "Automatic rebase with conflict resolution failed."
+            exit 1
+          fi
