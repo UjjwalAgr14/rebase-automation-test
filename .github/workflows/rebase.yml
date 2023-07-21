@@ -21,11 +21,8 @@ jobs:
           git fetch origin dev
           git checkout dev
 
-      - name: Enable rerere
-        run: git config --global rerere.enabled true
-
-      - name: Pull changes from main
-        run: git pull origin main
+      - name: Pull changes from main and rebase
+        run: git pull origin main --rebase
 
       - name: Automatic rebase with conflict resolution
         run: |
