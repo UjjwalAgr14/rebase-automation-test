@@ -21,6 +21,9 @@ jobs:
           git fetch origin dev
           git checkout dev
 
+      - name: Set pull strategy to merge
+        run: git config pull.rebase false
+
       - name: Pull changes from main and merge
         run: git pull origin main
 
