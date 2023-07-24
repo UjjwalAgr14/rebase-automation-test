@@ -25,7 +25,7 @@ jobs:
         run: git config pull.rebase false
 
       - name: Pull changes from main and merge
-        run: git pull origin main
+        run: git pull origin main --allow-unrelated-histories
 
       - name: Automatic merge with conflict resolution
         run: |
