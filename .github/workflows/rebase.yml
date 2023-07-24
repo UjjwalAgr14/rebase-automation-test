@@ -21,21 +21,19 @@ jobs:
           git fetch origin dev
           git checkout dev
 
-      - name: Set pull strategy to merge
-        run: git config pull.rebase false
+      - name: Enable rerere
+        run: git config --global rerere.enabled true
 
       - name: Pull changes from main and merge
         run: git pull origin main --allow-unrelated-histories
 
       - name: Automatic merge with conflict resolution
         run: |
-          if git diff --name-only --diff-filter=U | grep -q .; then
+          while git diff --name-only --diff-filter=U | grep -q .; do
             echo "Conflict found, resolving conflicts..."
             git checkout --theirs .
             git add .
-            git commit -m "Merge conflict resolution"
-          fi
-
-      - name: Push the updated dev branch
-        run: git push origin HEAD:dev
+            git rebase --continue
+          done
+          git push origin HEAD:dev
 
