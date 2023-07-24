@@ -21,11 +21,11 @@ jobs:
           git fetch origin dev
           git checkout dev
 
-      - name: Enable rerere
-        run: git config --global rerere.enabled true
+      - name: Set pull strategy to merge
+        run: git config pull.rebase false
 
-      - name: Pull changes from main and merge
-        run: git pull origin main --allow-unrelated-histories
+      - name: Merge changes from main into dev
+        run: git merge origin/main
 
       - name: Automatic merge with conflict resolution
         run: |
@@ -33,7 +33,7 @@ jobs:
             echo "Conflict found, resolving conflicts..."
             git checkout --theirs .
             git add .
-            git rebase --continue
+            git commit -m "Merge conflict resolution"
           done
           git push origin HEAD:dev
 
