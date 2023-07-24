@@ -21,20 +21,18 @@ jobs:
           git fetch origin dev
           git checkout dev
 
-      - name: Enable rerere
-        run: git config --global rerere.enabled true
-
-      - name: Pull changes from main and rebase
+      - name: Pull changes from main and merge
         run: git pull origin main
 
-      - name: Automatic rebase with conflict resolution
+      - name: Automatic merge with conflict resolution
         run: |
-          while git rebase --continue; do :; done
-          if [ $? -eq 0 ]; then
-            git push origin HEAD:dev --force-with-lease
-          else
-            echo "Automatic rebase with conflict resolution failed."
-            exit 1
+          if git diff --name-only --diff-filter=U | grep -q .; then
+            echo "Conflict found, resolving conflicts..."
+            git checkout --theirs .
+            git add .
+            git commit -m "Merge conflict resolution"
           fi
-        env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Push the updated dev branch
+        run: git push origin HEAD:dev
+
