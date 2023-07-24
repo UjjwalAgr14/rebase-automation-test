@@ -25,7 +25,7 @@ jobs:
         run: git config --global rerere.enabled true
 
       - name: Pull changes from main and rebase
-        run: git pull origin main --rebase --autosquash
+        run: git pull origin main
 
       - name: Automatic rebase with conflict resolution
         run: |
