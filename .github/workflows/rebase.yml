@@ -36,6 +36,6 @@ jobs:
             echo "Conflict found, resolving conflicts..."
             git checkout --theirs .
             git add .
-            git commit -m "Merge conflict resolution"
           done
+          git commit -m "Merge conflict resolution"
           git push origin HEAD:dev
