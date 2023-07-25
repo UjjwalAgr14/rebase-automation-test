@@ -27,15 +27,8 @@ jobs:
       - name: Create an initial commit in dev branch
         run: git commit --allow-empty -m "Initial commit"
 
-      - name: Merge changes from main into dev
-        run: git merge origin/main --allow-unrelated-histories
+      - name: Merge changes from main into dev with conflict resolution
+        run: git merge origin/main --allow-unrelated-histories --strategy-option theirs
 
-      - name: Automatic merge with conflict resolution
-        run: |
-          while git diff --name-only --diff-filter=U | grep -q .; do
-            echo "Conflict found, resolving conflicts..."
-            git checkout --theirs .
-            git add .
-          done
-          git commit -m "Merge conflict resolution"
-          git push origin HEAD:dev
+      - name: Push the merge result to dev branch
+        run: git push origin HEAD:dev
