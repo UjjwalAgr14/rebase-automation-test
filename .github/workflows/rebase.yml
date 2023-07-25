@@ -28,7 +28,7 @@ jobs:
         run: git commit --allow-empty -m "Initial commit"
 
       - name: Merge changes from main into dev
-        run: git merge origin/main
+        run: git merge origin/main --allow-unrelated-histories
 
       - name: Automatic merge with conflict resolution
         run: |
@@ -39,4 +39,3 @@ jobs:
             git commit -m "Merge conflict resolution"
           done
           git push origin HEAD:dev
-
