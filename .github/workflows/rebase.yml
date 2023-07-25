@@ -1,4 +1,4 @@
-name: Automated Rebase
+name: Automated Merge
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  rebase:
+  merge:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,17 +21,14 @@ jobs:
           git fetch origin dev
           git checkout dev
 
-      - name: Pull changes from main and rebase
-        run: git pull origin main --rebase
+      - name: Set pull strategy to merge
+        run: git config pull.rebase false
 
-      - name: Automatic rebase with conflict resolution
-        run: |
-          while git rebase --continue; do :; done
-          if [ $? -eq 0 ]; then
-            git push origin HEAD:dev --force-with-lease
-          else
-            echo "Automatic rebase with conflict resolution failed."
-            exit 1
-          fi
-        env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      - name: Create an initial commit in dev branch
+        run: git commit --allow-empty -m "Initial commit"
+
+      - name: Merge changes from main into dev with conflict resolution
+        run: git merge origin/main --allow-unrelated-histories --strategy-option theirs
+
+      - name: Push the merge result to dev branch
+        run: git push origin HEAD:dev
