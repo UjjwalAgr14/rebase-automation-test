@@ -24,6 +24,9 @@ jobs:
       - name: Set pull strategy to merge
         run: git config pull.rebase false
 
+      - name: Create an initial commit in dev branch
+        run: git commit --allow-empty -m "Initial commit"
+
       - name: Merge changes from main into dev
         run: git merge origin/main
 
@@ -33,6 +36,7 @@ jobs:
             echo "Conflict found, resolving conflicts..."
             git checkout --theirs .
             git add .
-            git commit -m "Rebase from main"
+            git commit -m "Merge conflict resolution"
           done
           git push origin HEAD:dev
+
